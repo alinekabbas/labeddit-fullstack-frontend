@@ -58,7 +58,7 @@ const LoginPage = () => {
       h="120vh"
       flexDirection={'column'}
       alignItems={'center'}
-      border='1px solid gray'
+      border='1px solid #EDEDED'
     >
       <Flex>
         <StatusBar />
@@ -129,7 +129,6 @@ const LoginPage = () => {
       <VStack
         h='80vh'
         paddingTop='30px'
-        //justifyContent='space-between'
       >
         <Button
           w='365px'

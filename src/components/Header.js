@@ -1,13 +1,21 @@
 import { CloseButton, Flex, Image, Text } from '@chakra-ui/react'
-import React from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import logo from '../assets/logos/logo-header.png'
-import returnPostPageIcon from '../assets/icons/return-post-page.png'
+import { GlobalContext } from '../contexts/GlobalContext'
 import { goToLoginPage, goToPostsPage } from '../routes/coordinator'
 
 const Header = () => {
+    const context = useContext(GlobalContext)
     const navigate = useNavigate()
     const location = useLocation()
+    const { idPost } = useParams()
+
+    const logout = () => {
+        window.localStorage.removeItem("labeddit-token")
+        context.setIsAuth(false)
+        goToLoginPage(navigate)
+    }
     return (
         <Flex
             w="428px"
@@ -64,7 +72,7 @@ const Header = () => {
                             w='63px'
                             marginRight='30px'
                             cursor={'pointer'}
-                            onClick={() => goToLoginPage(navigate)}
+                            onClick={logout}
                         >
                             Logout
                         </Text>
@@ -72,7 +80,7 @@ const Header = () => {
                 </Flex>
             }
 
-            {location.pathname === '/:id/posts/comments' &&
+            {location.pathname === `${idPost}/posts/comments` &&
                 <Flex
                     w='428px'
                     h='50px'
@@ -81,15 +89,12 @@ const Header = () => {
                     justifyContent={'space-between'}
                 >
                     <Flex>
-                        {/* <Image
-                            
-                            src={returnPostPageIcon}
-                        /> */}
                         <CloseButton
                             w="24px"
                             h="24px"
                             color='#A3A3A3'
-                            size='lg' 
+                            size='lg'
+                            onClick={() => goToPostsPage(navigate)}
                         />
                     </Flex>
                     <Flex>
@@ -109,7 +114,7 @@ const Header = () => {
                             h='25px'
                             w='63px'
                             cursor={'pointer'}
-                            onClick={() => goToLoginPage(navigate)}
+                            onClick={logout}
                         >
                             Logout
                         </Text>

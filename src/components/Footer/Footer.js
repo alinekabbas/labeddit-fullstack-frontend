@@ -1,4 +1,4 @@
-import { Flex, Image } from '@chakra-ui/react'
+import { Image } from '@chakra-ui/react'
 import React from 'react'
 import bar from '../../assets/bar.png'
 import { FooterPage } from './Footer.style'
