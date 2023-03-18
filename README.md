@@ -8,7 +8,7 @@ Projeto fullstack para a criação de um aplicativo mobile first inspirado no Re
 
 O layout foi desenvolvido a partir do template do Figma conforme mostra a figura abaixo.
 
-![Layout](./labeddit-fullstack-frontend/src/assets/layout-pages.png)
+![Layout](./src/assets/layout-pages.png)
 
 ## Conteúdos abordados
 
