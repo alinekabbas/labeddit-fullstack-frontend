@@ -13,6 +13,14 @@ const CardPostAndComments = (props) => {
   const location = useLocation()
   const { idPost } = useParams()
 
+  const addLike = ()=>{
+
+  }
+
+  const addDislike = ()=>{
+    
+  }
+
   return (
     <>
       {location.pathname === '/posts' &&

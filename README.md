@@ -1,10 +1,14 @@
 # labeddit-fullstack-frontend
+
 Projeto fullstack para a criação de um aplicativo mobile first inspirado no Reddit.
+
+🔴 Acesse [aqui]() o link do deploy.
 
 ## Layout
 
-![Layout](./labeddit-fullstack-frontend/src/assets/layout-signup.png)
+O layout foi desenvolvido a partir do template do Figma conforme mostra a figura abaixo.
 
+![Layout](./labeddit-fullstack-frontend/src/assets/layout-pages.png)
 
 ## Conteúdos abordados
 
@@ -20,6 +24,8 @@ Projeto fullstack para a criação de um aplicativo mobile first inspirado no Re
 - Integração com APIs
 - Axios
 - Chakra UI
+
+🔴 Acesse [aqui](https://github.com/alinekabbas/labeddit-fullstack-backend) o link do repositório do LabEddit Backend
 
 
 ## 📧 Meu Contato

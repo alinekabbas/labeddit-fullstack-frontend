@@ -99,6 +99,7 @@ const LoginPage = () => {
           w='363px'
           h='60px'
           borderColor='#D5D8DE'
+          isRequired
         >
           <Input
             type="email"
@@ -107,6 +108,8 @@ const LoginPage = () => {
             name="email"
             autoComplete='off'
             placeholder="E-mail"
+            pattern='/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/'
+            title= "O email deve ter o formato 'exemplo@exemplo.com'"
           />
         </FormControl>
 
@@ -115,6 +118,7 @@ const LoginPage = () => {
           w='363px'
           h='60px'
           borderColor='#D5D8DE'
+          isRequired
         >
           <Input
             type="password"
@@ -123,6 +127,8 @@ const LoginPage = () => {
             name="password"
             autoComplete='off'
             placeholder="Senha"
+            pattern='/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,12}$/g'
+            title="'password' deve possuir entre 8 e 12 caracteres, com letras maiúsculas e minúsculas e no mínimo um número e um caractere especial"
           />
         </FormControl>
       </VStack>

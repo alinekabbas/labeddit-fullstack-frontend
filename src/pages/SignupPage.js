@@ -98,6 +98,7 @@ const SignupPage = () => {
             name="nickname"
             autoComplete='off'
             placeholder="Apelido"
+            isRequired
           />
         </FormControl>
 
@@ -114,6 +115,8 @@ const SignupPage = () => {
             name="email"
             autoComplete='off'
             placeholder="E-mail"
+            pattern='/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/'
+            title= "O email deve ter o formato 'exemplo@exemplo.com'"
           />
         </FormControl>
 
@@ -130,6 +133,8 @@ const SignupPage = () => {
             name="password"
             autoComplete='off'
             placeholder="Senha"
+            pattern='/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,12}$/g'
+            title="'password' deve possuir entre 8 e 12 caracteres, com letras maiúsculas e minúsculas e no mínimo um número e um caractere especial"
           />
         </FormControl>
       </Stack>
@@ -151,7 +156,7 @@ const SignupPage = () => {
             Política de Privacidade
           </Link>
         </Text>
-        <Checkbox colorScheme='orange' size={'sm'}>
+        <Checkbox colorScheme='orange' size={'sm'} isRequired>
           Eu concordo em receber emails sobre coisas legais do LabEddit
         </Checkbox>
       </Stack>
