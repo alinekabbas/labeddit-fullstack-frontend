@@ -1,4 +1,16 @@
-import { Button, Flex, FormControl, Image, Input, Spinner, Text, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  Flex,
+  FormControl,
+  Image,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Spinner,
+  Text,
+  VStack
+} from '@chakra-ui/react'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import React, { useContext, useEffect, useState } from 'react'
 import StatusBar from '../components/StatusBar'
 import logo from '../assets/logos/logo-page-login.png'
@@ -12,9 +24,16 @@ import Footer from '../components/Footer/Footer'
 
 const LoginPage = () => {
   const context = useContext(GlobalContext)
+  const {
+    isAuth,
+    setIsAuth,
+    isLoading,
+    setIsLoading
+  } = context
+
   const navigate = useNavigate()
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const [form, setForm] = useState({
     email: "",
@@ -26,7 +45,7 @@ const LoginPage = () => {
   }
 
   useEffect(() => {
-    if (context.isAuth) {
+    if (isAuth) {
       goToPostsPage(navigate)
     }
   })
@@ -44,10 +63,11 @@ const LoginPage = () => {
 
       window.localStorage.setItem("labeddit-token", response.data.token)
       setIsLoading(false)
-      context.setIsAuth(true)
+      setIsAuth(true)
       goToPostsPage(navigate)
 
     } catch (error) {
+      alert(error.response.data)
       console.log(error)
       setIsLoading(false)
     }
@@ -109,7 +129,7 @@ const LoginPage = () => {
             autoComplete='off'
             placeholder="E-mail"
             pattern='/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/'
-            title= "O email deve ter o formato 'exemplo@exemplo.com'"
+            title="O email deve ter o formato 'exemplo@exemplo.com'"
           />
         </FormControl>
 
@@ -120,16 +140,27 @@ const LoginPage = () => {
           borderColor='#D5D8DE'
           isRequired
         >
-          <Input
-            type="password"
-            value={form.password}
-            onChange={onChangeForm}
-            name="password"
-            autoComplete='off'
-            placeholder="Senha"
-            pattern='/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,12}$/g'
-            title="'password' deve possuir entre 8 e 12 caracteres, com letras maiúsculas e minúsculas e no mínimo um número e um caractere especial"
-          />
+          <InputGroup>
+            <Input
+              type={showPassword ? 'text' : 'password'}
+              value={form.password}
+              onChange={onChangeForm}
+              name="password"
+              autoComplete='off'
+              placeholder="Senha"
+              pattern='/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,12}$/g'
+              title="'password' deve possuir entre 8 e 12 caracteres, com letras maiúsculas e minúsculas e no mínimo um número e um caractere especial"
+            />
+            <InputRightElement h={'full'}>
+              <Button
+                variant={'ghost'}
+                onClick={() =>
+                  setShowPassword((showPassword) => !showPassword)
+                }>
+                {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
         </FormControl>
       </VStack>
       <VStack
@@ -170,7 +201,7 @@ const LoginPage = () => {
           Crie uma conta!
         </Button>
       </VStack>
-      <Footer/>
+      <Footer />
     </Flex>
   )
 }

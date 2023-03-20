@@ -1,4 +1,14 @@
-import { Button, Checkbox, Flex, FormControl, Input, Link, Spinner, Stack, Text } from '@chakra-ui/react'
+import { 
+  Button, 
+  Checkbox, 
+  Flex, 
+  FormControl, 
+  Input, 
+  Link, 
+  Spinner, 
+  Stack, 
+  Text 
+} from '@chakra-ui/react'
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -12,9 +22,19 @@ import { goToPostsPage } from '../routes/coordinator'
 
 const SignupPage = () => {
   const context = useContext(GlobalContext)
+  const {
+    isLoading,
+    setIsLoading,
+    isAuth,
+    setIsAuth
+  } = context
   const navigate = useNavigate()
 
-  const [isLoading, setIsLoading] = useState(false)
+  useEffect(() => {
+    if (isAuth) {
+      goToPostsPage(navigate)
+    }
+  })
 
   const [form, setForm] = useState({
     nickname: "",
@@ -25,12 +45,6 @@ const SignupPage = () => {
   const onChangeForm = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value })
   }
-
-  useEffect(() => {
-    if (context.isAuth) {
-      goToPostsPage(navigate)
-    }
-  })
 
   const signup = async () => {
     try {
@@ -47,9 +61,10 @@ const SignupPage = () => {
 
       window.localStorage.setItem("labeddit-token", response.data.token)
       setIsLoading(false)
-      context.setIsAuth(true)
+      setIsAuth(true)
       goToPostsPage(navigate)
     } catch (error) {
+      alert(error.response.data)
       console.log(error)
       setIsLoading(false)
     }
@@ -67,7 +82,7 @@ const SignupPage = () => {
         flexDirection={'column'}
       >
         <StatusBar />
-        <Header />
+        <Header signup={signup}/>
       </Flex>
       <Flex
         w='364px'
@@ -116,7 +131,7 @@ const SignupPage = () => {
             autoComplete='off'
             placeholder="E-mail"
             pattern='/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/'
-            title= "O email deve ter o formato 'exemplo@exemplo.com'"
+            title="O email deve ter o formato 'exemplo@exemplo.com'"
           />
         </FormControl>
 
@@ -163,7 +178,7 @@ const SignupPage = () => {
       <Flex
         h='80vh'
         paddingTop='30px'
-        >
+      >
         <Button
           w='365px'
           h='50px'

@@ -5,15 +5,19 @@ import logo from '../assets/logos/logo-header.png'
 import { GlobalContext } from '../contexts/GlobalContext'
 import { goToLoginPage, goToPostsPage } from '../routes/coordinator'
 
-const Header = () => {
+const Header = (props) => {
+    const {signup} = props
+    
     const context = useContext(GlobalContext)
+    const {setIsAuth} = context
+
     const navigate = useNavigate()
     const location = useLocation()
     const { idPost } = useParams()
 
     const logout = () => {
         window.localStorage.removeItem("labeddit-token")
-        context.setIsAuth(false)
+        setIsAuth(false)
         goToLoginPage(navigate)
     }
     return (
@@ -44,7 +48,7 @@ const Header = () => {
                             w='55px'
                             marginRight='30px'
                             cursor={'pointer'}
-                            onClick={() => goToPostsPage(navigate)}
+                            onClick={signup}
                         >
                             Entrar
                         </Text>
@@ -80,7 +84,7 @@ const Header = () => {
                 </Flex>
             }
 
-            {location.pathname === `${idPost}/posts/comments` &&
+            {location.pathname === `/comments/${idPost}/post` &&
                 <Flex
                     w='428px'
                     h='50px'

@@ -1,4 +1,12 @@
-import { Button, Flex, Image, Input, Spinner, Stack, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  Flex,
+  Image,
+  Input,
+  Spinner,
+  Stack,
+  VStack
+} from '@chakra-ui/react'
 import axios from 'axios'
 import React, { useContext, useState } from 'react'
 import Header from '../components/Header'
@@ -7,12 +15,11 @@ import { BASE_URL } from '../constants/url'
 import { GlobalContext } from '../contexts/GlobalContext'
 import line from '../assets/line.png'
 import Footer from '../components/Footer/Footer'
+import CardPost from '../components/CardPost'
 
 const PostsPage = () => {
   const context = useContext(GlobalContext)
-  const {renderPosts} = context
-  
-  const [isLoading, setIsLoading] = useState(false)
+  const { isLoading, setIsLoading, posts, getPosts } = context
 
   const [form, setForm] = useState({
     content: ""
@@ -38,15 +45,23 @@ const PostsPage = () => {
         `${BASE_URL}/posts`, body, config
       )
       setIsLoading(false)
+      getPosts()
       setForm({
         content: ""
       })
     } catch (error) {
+      alert(error.response.data)
       console.log(error)
       setIsLoading(false)
     }
   }
 
+  const renderPosts = posts.map((post) => {
+    return <CardPost
+      key={post.id}
+      post={post}
+    />
+  })
 
   return (
     <Flex
@@ -82,7 +97,7 @@ const PostsPage = () => {
         />
       </Stack>
       <Flex
-      paddingTop='12px'
+        paddingTop='12px'
       >
         <Button
           w='365px'
@@ -105,14 +120,11 @@ const PostsPage = () => {
         src={line}
       />
 
-      <VStack
-      paddingTop='24px'
-      
-      >
+      <VStack paddingTop='24px'>
         {renderPosts}
       </VStack>
 
-      <Footer/>
+      <Footer />
     </Flex>
   )
 }
