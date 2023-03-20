@@ -11,5 +11,5 @@ export const goToPostsPage = (navigate) => {
 }
 
 export const goToCommentsPage = (navigate, idPost) => {
-    navigate(`${idPost}/posts/comments`)
+    navigate(`/comments/${idPost}/post`)
 }

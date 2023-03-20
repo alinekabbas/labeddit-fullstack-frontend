@@ -1,19 +1,20 @@
 import { Button, Flex, Image, Input, Spinner, Stack, VStack } from '@chakra-ui/react'
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import Header from '../components/Header'
 import StatusBar from '../components/StatusBar'
 import { BASE_URL } from '../constants/url'
 import line from '../assets/line.png'
-import CardPostAndComments from '../components/CardPostAndComments'
+
 import Footer from '../components/Footer/Footer'
+import CardComment from '../components/CardComment'
+import { GlobalContext } from '../contexts/GlobalContext'
 
 const CommentsPage = () => {
-  const params = useParams()
-  const [comments, setComments] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-
+  const context = useContext(GlobalContext)
+  const { isLoading, setIsLoading, postComments, getPostWithComments } = context
+  
   const [form, setForm] = useState({
     content: ""
   })
@@ -35,54 +36,21 @@ const CommentsPage = () => {
       }
 
       await axios.post(
-        `${BASE_URL}/comments/${params.idPost}/post`, body, config
+        `${BASE_URL}/comments/${postComments.id}/post`, body, config
       )
       setIsLoading(false)
       setForm({
         content: ""
       })
     } catch (error) {
+      alert(error.response.data)
       console.log(error)
       setIsLoading(false)
     }
   }
 
-  useEffect(() => {
-    if (comments.length > 0) {
-      const commentString = JSON.stringify(comments)
-      localStorage.setItem('comment', commentString)
-    }
-  }, [comments])
-
-  useEffect(() => {
-    const getSaveComment = JSON.parse(localStorage.getItem('comment'))
-    if (getSaveComment !== null) {
-      setComments(getSaveComment)
-    }
-  }, [])
-
-  useEffect(() => {
-    getComments()
-  }, [])
-
-  const getComments = async () =>{
-    try {
-      setIsLoading(true)
-      const config = {
-        headers: {
-          Authorization: window.localStorage.getItem("labeddit-token")
-        }
-      }
-      const response = await axios.get(`${BASE_URL}/posts/${params.idPost}/comments`, config)
-      console.log(response.data)
-      setComments(response.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const renderComments = comments.map((comment) => {
-    return <CardPostAndComments
+  const renderComments = postComments.map((comment) => {
+    return <CardComment
       key={comment.id}
       comment={comment}
     />
