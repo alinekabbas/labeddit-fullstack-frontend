@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer/Footer'
 import Header from '../components/Header'
 import StatusBar from '../components/StatusBar'
@@ -76,7 +76,6 @@ const SignupPage = () => {
       h="120vh"
       flexDirection={'column'}
       alignItems={'center'}
-      border='1px solid #EDEDED'
     >
       <Flex
         flexDirection={'column'}
