@@ -13,7 +13,7 @@ const Header = (props) => {
 
     const navigate = useNavigate()
     const location = useLocation()
-    const { idPost } = useParams()
+    const { postId } = useParams()
 
     const logout = () => {
         window.localStorage.removeItem("labeddit-token")
@@ -84,13 +84,13 @@ const Header = (props) => {
                 </Flex>
             }
 
-            {location.pathname === `/comments/${idPost}/post` &&
+            {location.pathname === `/post/${postId}/comments` &&
                 <Flex
                     w='428px'
                     h='50px'
                     padding='0px 30px'
-                    alignItems={'center'}
-                    justifyContent={'space-between'}
+                    alignItems='center'
+                    justifyContent='space-between'
                 >
                     <Flex>
                         <CloseButton
@@ -117,7 +117,7 @@ const Header = (props) => {
                             color='#4088CB'
                             h='25px'
                             w='63px'
-                            cursor={'pointer'}
+                            cursor='pointer'
                             onClick={logout}
                         >
                             Logout

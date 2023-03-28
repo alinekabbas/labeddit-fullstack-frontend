@@ -1,15 +1,12 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { BASE_URL } from '../constants/url'
+import CardPost from '../components/CardPost'
 
 const GlobalState = () => {
     const [isAuth, setIsAuth] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [posts, setPosts] = useState([])
-    const [postComments, setPostComments] = useState([])
-
-    const {idPost} = useParams()
 
     useEffect(() => {
         const token = window.localStorage.getItem("labeddit-token")
@@ -32,6 +29,7 @@ const GlobalState = () => {
         }
     }, [])
 
+
     useEffect(() => {
         getPosts()
     }, [])
@@ -51,39 +49,12 @@ const GlobalState = () => {
         }
     }
 
-    useEffect(() => {
-        if (postComments.length > 0) {
-          const commentString = JSON.stringify(postComments)
-          localStorage.setItem('comment', commentString)
-        }
-      }, [postComments])
-    
-      useEffect(() => {
-        const getSaveComment = JSON.parse(localStorage.getItem('comment'))
-        if (getSaveComment !== null) {
-            setPostComments(getSaveComment)
-        }
-      }, [])
-    
-      useEffect(() => {
-        getPostWithComments()
-      }, [])
-    
-      const getPostWithComments = async () =>{
-        try {
-          setIsLoading(true)
-          const config = {
-            headers: {
-              Authorization: window.localStorage.getItem("labeddit-token")
-            }
-          }
-          const response = await axios.get(`${BASE_URL}/posts/${idPost}/comments`, config)
-          console.log(response.data)
-          setPostComments(response.data)
-        } catch (error) {
-          console.log(error)
-        }
-      }
+    const renderPosts = posts.map((post) => {
+        return <CardPost
+            key={post.id}
+            post={post}
+        />
+    })
 
     return (
         {
@@ -94,9 +65,7 @@ const GlobalState = () => {
             posts,
             setPosts,
             getPosts,
-            postComments,
-            setPostComments,
-            getPostWithComments
+            renderPosts
         }
     )
 }

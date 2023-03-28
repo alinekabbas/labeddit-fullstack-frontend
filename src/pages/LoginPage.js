@@ -78,7 +78,6 @@ const LoginPage = () => {
       h="120vh"
       flexDirection={'column'}
       alignItems={'center'}
-      border='1px solid #EDEDED'
     >
       <Flex>
         <StatusBar />

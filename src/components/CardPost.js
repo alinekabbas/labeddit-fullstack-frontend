@@ -1,13 +1,24 @@
-import { Image, Flex, Text, useEditableControls, Input, EditablePreview, Editable, EditableInput, IconButton, ButtonGroup } from '@chakra-ui/react'
+import {
+  Image,
+  Flex,
+  Text,
+  useEditableControls,
+  Input,
+  EditablePreview,
+  Editable,
+  EditableInput,
+  IconButton,
+  ButtonGroup
+} from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
 import likeIcon from '../assets/icons/like.svg'
 import dislikeIcon from '../assets/icons/dislike.svg'
-import { useNavigate } from 'react-router'
 import { goToCommentsPage } from '../routes/coordinator'
 import { ChatIcon, CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { GlobalContext } from '../contexts/GlobalContext'
 import axios from 'axios'
 import { BASE_URL } from '../constants/url'
+import {  useNavigate } from 'react-router-dom'
 
 const CardPost = (props) => {
   const { post } = props
@@ -17,11 +28,10 @@ const CardPost = (props) => {
 
   const [content, setContent] = useState(post.content)
   const [postToEdit, setPostToEdit] = useState(false)
-  const [likePost, setLikePost] = useState(post.likes)
-  const [dislikePost, setDislikePost] = useState(post.dislikes)
+  const [like, setlike] = useState(post.likes)
+  const [dislike, setDislike] = useState(post.dislikes)
 
   const navigate = useNavigate()
-
 
   const editPost = async () => {
     try {
@@ -41,6 +51,7 @@ const CardPost = (props) => {
 
     } catch (error) {
       console.log(error)
+      alert(error.response.data)
       setIsLoading(false)
     }
   }
@@ -60,27 +71,60 @@ const CardPost = (props) => {
 
     } catch (error) {
       console.log(error)
+      alert(error.response.data)
       setIsLoading(false)
     }
   }
 
-  // const likeDislikePost = async () => {
-  //   try {
-  //     const body = {
-  //       like: 
-  //     }
-  //     const config = {
-  //       headers: {
-  //         Authorization: window.localStorage.getItem("labeddit-token")
-  //       }
-  //     }
+  const likePost = async () => {
+    try {
+      setIsLoading(true)
+      const body = {
+        like: true
+      }
+      const config = {
+        headers: {
+          Authorization: window.localStorage.getItem("labeddit-token")
+        }
+      }
+      await axios.put(`${BASE_URL}/posts/${post.id}/like`, body, config)
+      if (like) {
+        setlike(like + 1)
+      }
 
+      setIsLoading(false)
+      getPosts()
 
-  //   } catch (error) {
-  //     console.log(error)
-  //     setIsLoading(false)
-  //   }
-  // }
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+    }
+  }
+
+  const dislikePost = async () => {
+    try {
+      setIsLoading(true)
+      const body = {
+        like: false
+      }
+      const config = {
+        headers: {
+          Authorization: window.localStorage.getItem("labeddit-token")
+        }
+      }
+      await axios.put(`${BASE_URL}/posts/${post.id}/like`, body, config)
+      if (!dislike) {
+        setDislike(dislike + 1)
+      }
+
+      setIsLoading(false)
+      getPosts()
+
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+    }
+  }
 
   const EditableControls = () => {
     const {
@@ -97,14 +141,13 @@ const CardPost = (props) => {
       </ButtonGroup>
     ) : (
       <Flex >
-        <IconButton icon={<EditIcon color='#6F6F6F' />} {...getEditButtonProps()} />
+        <IconButton icon={<EditIcon onClick={editPost} color='#6F6F6F' />} {...getEditButtonProps()} />
       </Flex>
     )
   }
 
   return (
     <>
-
       <Flex
         flexDirection='column'
         w='364px'
@@ -115,8 +158,9 @@ const CardPost = (props) => {
         border='1px solid #E0E0E0'
         borderRadius='12px'
         fontFamily="IBM Plex Sans, sans-serif"
-        fontWeight='400'
-      >
+        fontWeight='400'>
+
+
         <Flex justifyContent='space-between'>
           <Text
             fontSize='12px'
@@ -126,11 +170,12 @@ const CardPost = (props) => {
           </Text>
           <DeleteIcon color='red' cursor='pointer' onClick={deletePost} />
         </Flex>
+
         <Text
           fontSize='18px'
         >
           <Editable
-            defaultValue={post.content}
+            defaultValue={content}
             isPreviewFocusable={false}
           >
             <EditablePreview />
@@ -138,7 +183,6 @@ const CardPost = (props) => {
             <Input as={EditableInput} value={content} onChange={(e) => setContent(e.target.value)} />
             <EditableControls />
           </Editable>
-
         </Text>
         <Flex
           w='175px'
@@ -155,10 +199,11 @@ const CardPost = (props) => {
             borderRadius='28px'
             fontWeight='700'
           >
-            <Image cursor={'pointer'} src={likeIcon} alt='icone like' />
+            <Image cursor={'pointer'} src={likeIcon} alt='icone like' onClick={() => likePost(post.id)} />
             {post.likes}
-            <Image cursor={'pointer'} src={dislikeIcon} alt='icone like' />
+            <Image cursor={'pointer'} src={dislikeIcon} alt='icone like' onClick={() => dislikePost(post.id)} />
           </Flex>
+
           <Flex
             w='66px'
             padding='4px'
@@ -172,7 +217,9 @@ const CardPost = (props) => {
             {post.commentsPost}
           </Flex>
         </Flex>
+
       </Flex>
+
     </>
   )
 }
